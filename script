@@ -1,0 +1,50 @@
+prompt.Enabled
+            local originalHold = prompt.HoldDuration
+            local originalLineOfSight = prompt.RequiresLineOfSight
+            local originalCamCFrame = workspace.CurrentCamera.CFrame
+        
+            prompt.Enabled = true
+            prompt.HoldDuration = 0
+            prompt.RequiresLineOfSight = false
+            
+            if lookToPrompt then
+                workspace.CurrentCamera.CFrame = CFrame.new(workspace.CurrentCamera.CFrame.Position, promptPosition)
+                connection = workspace.CurrentCamera:GetPropertyChangedSignal("CFrame"):Connect(function()
+                    workspace.CurrentCamera.CFrame = CFrame.new(workspace.CurrentCamera.CFrame.Position, promptPosition)
+                end)
+
+                task.wait()
+            end
+
+            prompt:InputHoldEnd()
+            prompt:InputHoldBegin()
+            prompt:InputHoldEnd()
+
+            if connection then connection:Disconnect() end
+
+            prompt.Enabled = originalEnabled
+            prompt.HoldDuration = originalHold
+            prompt.RequiresLineOfSight = originalLineOfSight
+            workspace.CurrentCamera.CFrame = originalCamCFrame
+        end
+    end
+
+    if not isnetworkowner then
+        getgenv().isnetworkowner = function(part: BasePart)
+            if not part:IsA("BasePart") then
+                return error("BasePart expected, got " .. typeof(part))
+            end
+
+            return part.ReceiveAge == 0
+        end
+    end
+
+    --// Load \\--
+
+    for name, result in pairs(executorSupport) do
+        print(name .. ":", result)
+    end
+
+    getgenv().ExecutorSupport = executorSupport
+end
+
